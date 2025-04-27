@@ -107,13 +107,19 @@ export default function SlideshowPlayer({ params }: { params: { id: string } }) 
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#3d461f]">
-      {/* Top buttons */}
-      <div className="absolute top-6 w-full px-8 flex justify-between z-10">
+    <div className={`min-h-screen flex flex-col items-center justify-center p-4 bg-[#3d461f] relative ${
+      isFullscreen ? 'bg-black p-0' : ''
+    }`}>
+      {/* Top buttons - now with conditional styling */}
+      <div className={`${
+        isFullscreen 
+          ? 'absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/50 to-transparent z-20'
+          : 'absolute top-6 w-full px-8'
+      } flex justify-between z-10`}>
         <Button
           variant="ghost"
           size="lg"
-          className="text-slate-100 hover:bg-[#4a543f]"
+          className="text-slate-100 hover:bg-black/30"
           onClick={() => router.push('/SlideshowManager')}
         >
           <X className="h-8 w-8" />
@@ -122,7 +128,7 @@ export default function SlideshowPlayer({ params }: { params: { id: string } }) 
         <Button
           variant="ghost"
           size="lg"
-          className="text-slate-100 hover:bg-[#4a543f]"
+          className="text-slate-100 hover:bg-black/30"
           onClick={toggleFullscreen}
         >
           {isFullscreen ? (
@@ -133,8 +139,12 @@ export default function SlideshowPlayer({ params }: { params: { id: string } }) 
         </Button>
       </div>
 
-      {/* Image container - increased size */}
-      <div className="relative w-[1024px] h-[768px] mb-12 bg-black rounded-lg overflow-hidden">
+      {/* Image container - now fullscreen when in fullscreen mode */}
+      <div className={`relative ${
+        isFullscreen 
+          ? 'w-screen h-screen' 
+          : 'w-[1024px] h-[768px] mb-12'
+      } bg-black overflow-hidden`}>
         {!Array.isArray(slideshow) && slideshow.images.length > 0 && (
           <Image
             src={slideshow.images[currentImageIndex].image.src}
@@ -146,12 +156,20 @@ export default function SlideshowPlayer({ params }: { params: { id: string } }) 
         )}
       </div>
 
-      {/* Controls - centered with prev/next buttons, increased size further */}
-      <div className="flex items-center justify-center gap-8">
+      {/* Controls - now with conditional positioning and styling */}
+      <div className={`flex items-center justify-center gap-8 ${
+        isFullscreen 
+          ? 'absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/50 to-transparent z-20'
+          : ''
+      }`}>
         <Button
           variant="ghost"
           size="lg"
-          className="text-slate-100 hover:bg-[#4a543f] p-6"
+          className={`text-slate-100 ${
+            isFullscreen 
+              ? 'hover:bg-black/30' 
+              : 'hover:bg-[#4a543f]'
+          } p-6`}
           onClick={previousImage}
         >
           <ArrowLeft className="h-10 w-10" />
@@ -160,7 +178,11 @@ export default function SlideshowPlayer({ params }: { params: { id: string } }) 
         <Button
           size="lg"
           onClick={isPlaying ? pauseSlideshow : startSlideshow}
-          className="bg-[#6b765c] hover:bg-[#7c876d] text-slate-100 text-xl px-8 py-6"
+          className={`${
+            isFullscreen 
+              ? 'bg-black/30 hover:bg-black/50' 
+              : 'bg-[#6b765c] hover:bg-[#7c876d]'
+          } text-slate-100 text-xl px-8 py-6`}
         >
           {isPlaying ? (
             <>
@@ -175,14 +197,23 @@ export default function SlideshowPlayer({ params }: { params: { id: string } }) 
           )}
         </Button>
 
-        <div className="bg-[#4a543f] px-8 py-4 rounded-md text-slate-100 text-xl">
+        <div className={`${
+          isFullscreen 
+            ? 'bg-black/30' 
+            : 'bg-[#4a543f]'
+        } px-8 py-4 rounded-md text-slate-100 text-xl`}
+        >
           {currentImageIndex + 1} / {!Array.isArray(slideshow) ? slideshow.images.length : 0}
         </div>
 
         <Button
           variant="ghost"
           size="lg"
-          className="text-slate-100 hover:bg-[#4a543f] p-6"
+          className={`text-slate-100 ${
+            isFullscreen 
+              ? 'hover:bg-black/30' 
+              : 'hover:bg-[#4a543f]'
+          } p-6`}
           onClick={nextImage}
         >
           <ArrowRight className="h-10 w-10" />
