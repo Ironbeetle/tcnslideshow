@@ -50,7 +50,7 @@ export default function SlideshowManager() {
             Back
           </Button>
           <h1 className="text-3xl font-bold text-center text-slate-100">
-            Manage Slideshows
+            Slideshow Manager 
           </h1>
           <div className="w-[100px]" /> {/* Spacer for centering */}
         </div>
